@@ -50,8 +50,7 @@ def available_perm_status(user):
         permission_names = role.permission_names_list()
 
         for permission_name in permission_names:
-            permission_hash[permission_name] = get_permission(
-                permission_name) in user.user_permissions.all()
+            permission_hash[permission_name] = True
 
     return permission_hash
 
