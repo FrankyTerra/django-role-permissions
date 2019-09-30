@@ -197,14 +197,23 @@ def retrieve_role(role_name):
     return RolesManager.retrieve_role(role_name)
 
 
+user_roles_cache = dict()
+
+
 def get_user_roles(user):
     """Get a list of a users's roles."""
     if user:
-        roles = user.groups.filter(
-            name__in=RolesManager.get_roles_names()).order_by("name")
-        return [RolesManager.retrieve_role(role.name) for role in roles]
+        return user_roles_cache.get(user.pk, _get_user_roles(user))
     else:
         return []
+
+
+def _get_user_roles(user):
+    roles = user.groups.filter(
+        name__in=RolesManager.get_roles_names()).order_by("name")
+    user_roles = [RolesManager.retrieve_role(role.name) for role in roles]
+    user_roles_cache.update({user.pk: user_roles})
+    return user_roles
 
 
 def _assign_or_remove_role(user, role, method_name):
