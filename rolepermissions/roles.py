@@ -203,7 +203,10 @@ user_roles_cache = dict()
 def get_user_roles(user):
     """Get a list of a users's roles."""
     if user:
-        return user_roles_cache.get(user.pk, _get_user_roles(user))
+        roles = user_roles_cache.get(user.pk)
+        if not roles:
+            roles = _get_user_roles(user)
+        return roles
     else:
         return []
 
