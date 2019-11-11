@@ -228,6 +228,8 @@ def _assign_or_remove_role(user, role, method_name):
         raise RoleDoesNotExist
 
     getattr(role_cls, method_name)(user)
+    
+    user_roles_cache.pop(user.pk, None)
 
     return role_cls
 
@@ -244,6 +246,7 @@ def remove_role(user, role):
 
 def clear_roles(user):
     """Remove all roles from a user."""
+    user_roles_cache.pop(user.pk, None)
     roles = get_user_roles(user)
 
     for role in roles:
