@@ -246,10 +246,11 @@ def remove_role(user, role):
 
 def clear_roles(user):
     """Remove all roles from a user."""
-    user_roles_cache.pop(user.pk, None)
     roles = get_user_roles(user)
 
     for role in roles:
         role.remove_role_from_user(user)
+       
+    user_roles_cache.pop(user.pk, None)
 
     return roles
